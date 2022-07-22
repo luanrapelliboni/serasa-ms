@@ -1,0 +1,17 @@
+# Build
+target/
+.mvn/wrapper/maven-wrapper.jar
+
+
+# OS
+.DS_Store
+
+# IntelliJ IDEA
+.idea
+*.iws
+*.iml
+*.ipr
+stale_outputs_checked
+
+#Docker
+.docker/postgres/data

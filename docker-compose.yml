@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  serasa-ms:
+    container_name: serasa-ms
+    platform: linux/amd64
+    build:
+      context: ./
+      dockerfile: "Dockerfile.dev"
+      network: host
+    command: sh -c "/wait && java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -jar ms-launcher-*.jar"
+    image: "serasa-ms"
+    volumes:
+      - ./ms-launcher/target:/app
+    ports:
+      - "8090:8080"
+      - "5090:5005"
+    depends_on:
+      - "serasa-ms-database"
+      - "serasa-oauth-server"
+    environment:
+      - PROFILE=DEVELOP
+      - TZ=America/Sao_Paulo
+      - ADDITIONAL_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+      - DB_NAME=serasa_ms
+      - DB_HOST=serasa-ms-database:5432
+      - DB_USER=app_user
+      - DB_PASS=app_passw@rd
+      - WAIT_HOSTS=serasa-ms-database:5432
+      - WAIT_HOSTS_TIMEOUT=300
+      - WAIT_SLEEP_INTERVAL=30
+      - WAIT_HOST_CONNECT_TIMEOUT=30
+    networks:
+      - serasa-network
+
+  serasa-ms-database:
+    container_name: serasa-ms-database
+    build:
+      context:  ./
+      dockerfile: "Dockerfile.db"
+    image: "serasa-ms-database"
+    shm_size: 2g
+    volumes:
+      - ./.docker/postgres/data:/var/lib/postgresql/data
+    ports:
+      - "5490:5432"
+    networks:
+      - serasa-network
+
+  serasa-oauth-server:
+    container_name: serasa-oauth-server
+    build:
+      context: ./
+      dockerfile: "Dockerfile.auth"
+    image: "serasa-oauth-server"
+    ports:
+      - "8080:8080"
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=Pa55w0rd
+    networks:
+      - serasa-network
+
+networks:
+  serasa-network:
+    driver: bridge
+
