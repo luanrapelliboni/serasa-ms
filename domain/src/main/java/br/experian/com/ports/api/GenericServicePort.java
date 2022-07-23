@@ -8,7 +8,7 @@ import java.util.List;
 public interface GenericServicePort<T extends BaseDTO, ID extends Serializable>  {
     T save(T entity) throws Exception;
     T update(T entity, ID id) throws Exception;
-    List<T> findAll();
-    T findById(ID entityId);
-    void deleteById(ID entityId);
+    List<T> findAll() throws Exception;
+    T findById(ID entityId) throws Exception;
+    void deleteById(ID entityId) throws Exception;
 }

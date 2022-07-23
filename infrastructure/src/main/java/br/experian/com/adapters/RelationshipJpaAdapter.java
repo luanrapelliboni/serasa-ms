@@ -3,6 +3,7 @@ package br.experian.com.adapters;
 import br.experian.com.data.RelationshipDTO;
 import br.experian.com.entity.Relationship;
 import br.experian.com.entity.State;
+import br.experian.com.exception.NotFoundException;
 import br.experian.com.ports.spi.RelationshipPersistencePort;
 import br.experian.com.repository.RelationshipRepository;
 import org.modelmapper.ModelMapper;
@@ -44,26 +45,32 @@ public class RelationshipJpaAdapter implements RelationshipPersistencePort {
             Relationship relationshipSaved = relationshipRepository.save(relationship);
             return modelMapper.map(relationshipSaved, RelationshipDTO.class);
         }
-        return null;
+        else
+            throw new NotFoundException("relationship not found");
     }
 
     @Override
-    public List<RelationshipDTO> findAll() {
+    public List<RelationshipDTO> findAll() throws Exception {
         List<Relationship> relationshipList = relationshipRepository.findAll();
         Type listType = new TypeToken<List<RelationshipDTO>>(){}.getType();
         return modelMapper.map(relationshipList, listType);
     }
 
     @Override
-    public RelationshipDTO findById(UUID entityId) {
+    public RelationshipDTO findById(UUID entityId) throws Exception {
         Optional<Relationship> relationshipOptional = relationshipRepository.findById(entityId);
         if (relationshipOptional.isPresent())
             return modelMapper.map(relationshipOptional.get(), RelationshipDTO.class);
-        return null;
+        else
+            throw new NotFoundException("relationship not found");
     }
 
     @Override
-    public void deleteById(UUID entityId) {
-        relationshipRepository.deleteById(entityId);
+    public void deleteById(UUID entityId) throws Exception {
+        Optional<Relationship> relationshipOptional = relationshipRepository.findById(entityId);
+        if (relationshipOptional.isPresent())
+            relationshipRepository.deleteById(entityId);
+        else
+            throw new NotFoundException("relationship not found");
     }
 }

@@ -4,8 +4,11 @@ import br.experian.com.data.PersonDTO;
 import br.experian.com.ports.api.PersonServicePort;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,27 +24,32 @@ public class PersonController {
     }
 
     @PostMapping("")
-    public PersonDTO add(@RequestBody PersonDTO personDTO) throws Exception {
-        return personServicePort.save(personDTO);
+    public ResponseEntity<PersonDTO> add(@RequestBody PersonDTO personDTO, UriComponentsBuilder builder) throws Exception {
+        PersonDTO personSaved = personServicePort.save(personDTO);
+        URI location = builder.path("/{uuid}")
+                .buildAndExpand(personSaved.getUuid())
+                .toUri();
+        return ResponseEntity.created(location).body(personSaved);
     }
 
     @PutMapping("/{uuid}")
-    public PersonDTO update(@RequestBody PersonDTO personDTO, @PathVariable UUID uuid) throws Exception{
-        return personServicePort.update(personDTO, uuid);
+    public ResponseEntity<PersonDTO> update(@RequestBody PersonDTO personDTO, @PathVariable UUID uuid) throws Exception{
+        return ResponseEntity.ok(personServicePort.update(personDTO, uuid));
     }
 
     @GetMapping("/{uuid}")
-    public PersonDTO findBy(@PathVariable UUID uuid) {
-        return personServicePort.findById(uuid);
+    public ResponseEntity<PersonDTO> findBy(@PathVariable UUID uuid) throws Exception {
+        return ResponseEntity.ok(personServicePort.findById(uuid));
     }
 
     @GetMapping("")
-    public List<PersonDTO> getAll() {
-        return personServicePort.findAll();
+    public ResponseEntity<List<PersonDTO>> getAll() throws Exception {
+        return ResponseEntity.ok(personServicePort.findAll());
     }
 
     @DeleteMapping("/{uuid}")
-    public void deleteBy(@PathVariable UUID uuid) {
+    public ResponseEntity<?> deleteBy(@PathVariable UUID uuid) throws Exception {
         personServicePort.deleteById(uuid);
+        return ResponseEntity.noContent().build();
     }
 }

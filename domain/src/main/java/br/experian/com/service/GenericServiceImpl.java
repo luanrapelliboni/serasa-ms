@@ -29,17 +29,17 @@ public class GenericServiceImpl<T extends BaseDTO, ID extends Serializable>
     }
 
     @Override
-    public List<T> findAll() {
+    public List<T> findAll() throws Exception {
         return genericPersistencePort.findAll();
     }
 
     @Override
-    public T findById(ID entityId) {
+    public T findById(ID entityId) throws Exception {
         return genericPersistencePort.findById(entityId);
     }
 
     @Override
-    public void deleteById(ID entityId) {
+    public void deleteById(ID entityId) throws Exception {
         genericPersistencePort.deleteById(entityId);
     }
 

@@ -5,6 +5,7 @@ Technologies:
 - Docker (Run apps in container LXC)
 - Docker Compose (Docker Automator)
 - Java 18 (Programming Language)
+- PostgreSQL 14 (SGBD)
 - Maven (Buld Tool)
 - JUnit and Mockito (Unit tests and mock)
 - Swagger 3 (Open API Documentation)

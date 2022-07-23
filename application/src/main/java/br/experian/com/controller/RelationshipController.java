@@ -4,8 +4,11 @@ import br.experian.com.data.RelationshipDTO;
 import br.experian.com.ports.api.RelationshipServicePort;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,27 +24,32 @@ public class RelationshipController {
     }
 
     @PostMapping("")
-    public RelationshipDTO add(@RequestBody RelationshipDTO relationshipDTO) throws Exception {
-        return relationshipServicePort.save(relationshipDTO);
+    public ResponseEntity<RelationshipDTO> add(@RequestBody RelationshipDTO relationshipDTO, UriComponentsBuilder builder) throws Exception {
+        RelationshipDTO relationshipSaved = relationshipServicePort.save(relationshipDTO);
+        URI location = builder.path("/{uuid}")
+                .buildAndExpand(relationshipSaved.getUuid())
+                .toUri();
+        return ResponseEntity.created(location).body(relationshipSaved);
     }
 
     @PutMapping("/{uuid}")
-    public RelationshipDTO update(@RequestBody RelationshipDTO relationshipDTO, @PathVariable UUID uuid) throws Exception{
-        return relationshipServicePort.update(relationshipDTO, uuid);
+    public ResponseEntity<RelationshipDTO> update(@RequestBody RelationshipDTO relationshipDTO, @PathVariable UUID uuid) throws Exception{
+        return ResponseEntity.ok(relationshipServicePort.update(relationshipDTO, uuid));
     }
 
     @GetMapping("/{uuid}")
-    public RelationshipDTO findBy(@PathVariable UUID uuid) {
-        return relationshipServicePort.findById(uuid);
+    public ResponseEntity<RelationshipDTO> findBy(@PathVariable UUID uuid) throws Exception {
+        return ResponseEntity.ok(relationshipServicePort.findById(uuid));
     }
 
     @GetMapping("")
-    public List<RelationshipDTO> getAll() {
-        return relationshipServicePort.findAll();
+    public ResponseEntity<List<RelationshipDTO>> getAll() throws Exception {
+        return ResponseEntity.ok(relationshipServicePort.findAll());
     }
 
     @DeleteMapping("/{uuid}")
-    public void deleteBy(@PathVariable UUID uuid) {
+    public ResponseEntity<?> deleteBy(@PathVariable UUID uuid) throws Exception {
         relationshipServicePort.deleteById(uuid);
+        return ResponseEntity.noContent().build();
     }
 }
