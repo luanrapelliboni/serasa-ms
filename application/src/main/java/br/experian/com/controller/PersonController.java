@@ -21,13 +21,13 @@ public class PersonController {
     }
 
     @PostMapping("")
-    public PersonDTO add(@RequestBody PersonDTO simulationDTO) throws Exception {
-        return personServicePort.save(simulationDTO);
+    public PersonDTO add(@RequestBody PersonDTO personDTO) throws Exception {
+        return personServicePort.save(personDTO);
     }
 
     @PutMapping("/{uuid}")
-    public PersonDTO update(@RequestBody PersonDTO simulationDTO, @PathVariable UUID uuid) throws Exception{
-        return personServicePort.update(simulationDTO, uuid);
+    public PersonDTO update(@RequestBody PersonDTO personDTO, @PathVariable UUID uuid) throws Exception{
+        return personServicePort.update(personDTO, uuid);
     }
 
     @GetMapping("/{uuid}")

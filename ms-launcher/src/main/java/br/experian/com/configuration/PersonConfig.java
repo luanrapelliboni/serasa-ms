@@ -12,12 +12,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class PersonConfig {
     @Bean
-    public PersonPersistencePort persistencePort(PersonRepository personRepository, ModelMapper modelMapper) {
+    public PersonPersistencePort personPersistencePort(PersonRepository personRepository, ModelMapper modelMapper) {
         return new PersonJpaAdapter(personRepository, modelMapper);
     }
 
     @Bean
-    public PersonServicePort servicePort(PersonRepository personRepository, ModelMapper modelMapper) {
-        return new PersonServiceImpl(persistencePort(personRepository, modelMapper));
+    public PersonServicePort personServicePort(PersonRepository personRepository, ModelMapper modelMapper) {
+        return new PersonServiceImpl(personPersistencePort(personRepository, modelMapper));
     }
 }

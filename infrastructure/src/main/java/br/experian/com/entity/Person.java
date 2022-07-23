@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "person")
+@Table(name = "persons")
 public class Person extends Base {
     private String name;
     private String phone;
