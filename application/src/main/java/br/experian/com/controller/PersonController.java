@@ -1,6 +1,7 @@
 package br.experian.com.controller;
 
 import br.experian.com.data.PersonDTO;
+import br.experian.com.data.response.PersonResponseDTO;
 import br.experian.com.ports.api.PersonServicePort;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -38,13 +39,13 @@ public class PersonController {
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<PersonDTO> findBy(@PathVariable UUID uuid) throws Exception {
-        return ResponseEntity.ok(personServicePort.findById(uuid));
+    public ResponseEntity<PersonResponseDTO> findBy(@PathVariable UUID uuid) throws Exception {
+        return ResponseEntity.ok(personServicePort.findByIdCustomResponse(uuid));
     }
 
     @GetMapping("")
-    public ResponseEntity<List<PersonDTO>> getAll() throws Exception {
-        return ResponseEntity.ok(personServicePort.findAll());
+    public ResponseEntity<List<PersonResponseDTO>> getAll() throws Exception {
+        return ResponseEntity.ok(personServicePort.findAllCustomResponse());
     }
 
     @DeleteMapping("/{uuid}")

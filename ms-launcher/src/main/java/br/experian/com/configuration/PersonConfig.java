@@ -1,6 +1,8 @@
 package br.experian.com.configuration;
 
 import br.experian.com.adapters.PersonJpaAdapter;
+import br.experian.com.ports.spi.RelationshipPersistencePort;
+import br.experian.com.ports.spi.ScorePersistencePort;
 import br.experian.com.repository.PersonRepository;
 import br.experian.com.ports.api.PersonServicePort;
 import br.experian.com.ports.spi.PersonPersistencePort;
@@ -17,7 +19,10 @@ public class PersonConfig {
     }
 
     @Bean
-    public PersonServicePort personServicePort(PersonRepository personRepository, ModelMapper modelMapper) {
-        return new PersonServiceImpl(personPersistencePort(personRepository, modelMapper));
+    public PersonServicePort personServicePort(PersonRepository personRepository,
+                                               RelationshipPersistencePort relationshipPersistencePort,
+                                               ScorePersistencePort scorePersistencePort,
+                                               ModelMapper modelMapper) {
+        return new PersonServiceImpl(personPersistencePort(personRepository, modelMapper), relationshipPersistencePort, scorePersistencePort);
     }
 }

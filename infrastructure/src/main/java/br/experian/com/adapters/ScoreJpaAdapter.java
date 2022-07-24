@@ -1,6 +1,8 @@
 package br.experian.com.adapters;
 
+import br.experian.com.data.RelationshipDTO;
 import br.experian.com.data.ScoreDTO;
+import br.experian.com.entity.Relationship;
 import br.experian.com.entity.Score;
 import br.experian.com.exception.NotFoundException;
 import br.experian.com.ports.spi.ScorePersistencePort;
@@ -10,6 +12,7 @@ import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -70,5 +73,14 @@ public class ScoreJpaAdapter implements ScorePersistencePort {
             scoreRepository.deleteById(entityId);
         else
             throw new NotFoundException("score not found");
+    }
+
+    @Override
+    public Optional<ScoreDTO> findByRange(BigDecimal score) throws Exception {
+        Optional<Score> scoreOptional = scoreRepository.findByRange(score);
+        ScoreDTO found = null;
+        if (scoreOptional.isPresent())
+            found = modelMapper.map(scoreOptional.get(), ScoreDTO.class);
+        return Optional.ofNullable(found);
     }
 }

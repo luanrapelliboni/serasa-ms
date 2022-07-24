@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
@@ -72,5 +73,14 @@ public class RelationshipJpaAdapter implements RelationshipPersistencePort {
             relationshipRepository.deleteById(entityId);
         else
             throw new NotFoundException("relationship not found");
+    }
+
+    @Override
+    public Optional<RelationshipDTO> findByRegion(String region) throws Exception {
+        Optional<Relationship> relationshipOptional = relationshipRepository.findByRegion(region);
+        RelationshipDTO found = null;
+        if (relationshipOptional.isPresent())
+            found = modelMapper.map(relationshipOptional.get(), RelationshipDTO.class);
+        return Optional.ofNullable(found);
     }
 }
