@@ -42,5 +42,12 @@ To Get Token (JWT) use url bellow:
 
 ![Change Hostname](./assets/get-token.png)
 
+To build and run applicaiton:
+- $ mvn clean install -DskipTests (to skip tests) or mvn clean install
+- $ docker-compose up
+
+Obs: In ./assets folder contain 'Serasa MS.postman_colletion.json' to test APIs with Postman App.
+
+
 
 

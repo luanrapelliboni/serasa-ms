@@ -19,5 +19,4 @@ public class PersonDTO extends BaseDTO {
     private String state;
     private BigDecimal score;
     private String region;
-
 }
